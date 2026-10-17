@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tín hiệu chứng khoán Việt Nam</title>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@5.0.0/dist/lightweight-charts.standalone.production.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#eef1f5;--pn:#fff;--tx:#17202e;--mu:#667389;--ln:#dfe4eb;--up:#0b9a4e;--dn:#e0342f;--ac:#1f5fd6;--wa:#a8700f;--sf:#f6f8fb;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1118;--pn:#151c26;--tx:#e5eaf2;--mu:#8895a8;--ln:#263140;--up:#2fcf74;--dn:#ff5d55;--ac:#6aa3ff;--wa:#e2b34f;--sf:#1b2430;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1118;--pn:#151c26;--tx:#e5eaf2;--mu:#8895a8;--ln:#263140;--up:#2fcf74;--dn:#ff5d55;--ac:#6aa3ff;--wa:#e2b34f;--sf:#1b2430;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding:10px 16px;background:var(--pn);border-bottom:1px solid var(--ln)}
+header h1{font-size:16px;margin:0;font-weight:600}
+.mk{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:13px;color:var(--mu)}
+.pill{padding:2px 10px;border-radius:99px;font-weight:600;font-size:12px;background:color-mix(in srgb,var(--wa) 16%,transparent);color:var(--wa)}
+main{display:grid;grid-template-columns:300px minmax(0,1fr) 320px;gap:10px;padding:10px;align-items:start}
+.pn{background:var(--pn);border:1px solid var(--ln);border-radius:8px;min-width:0}
+.pn h2{font-size:13px;margin:0;padding:10px 12px;font-weight:600;border-bottom:1px solid var(--ln)}
+.tabs{display:flex;border-bottom:1px solid var(--ln)}
+.tabs button,.tf button{flex:1;border:0;background:none;color:var(--mu);padding:9px 4px;font:inherit;font-size:13px;cursor:pointer;border-bottom:2px solid transparent}
+.tabs button.on,.tf button.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:600}
+button:focus-visible{outline:2px solid var(--ac);outline-offset:-2px}
+.lst{max-height:calc(100vh - 170px);overflow:auto}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 8px;width:100%;text-align:left;border:0;border-bottom:1px solid var(--ln);background:none;color:inherit;font:inherit;padding:9px 12px;cursor:pointer}
+.row:hover{background:var(--sf)}.row.on{background:var(--sf);box-shadow:inset 3px 0 var(--ac)}
+.row b{font-weight:600}.row small{color:var(--mu);font-size:12px}
+.sc{font-weight:600;text-align:right}
+.lb{font-size:12px;text-align:right}
+.up{color:var(--up)}.dn{color:var(--dn)}.wa{color:var(--wa)}.mu{color:var(--mu)}
+.new{font-size:11px;color:var(--ac);font-weight:600}
+.tb{display:flex;align-items:center;gap:6px;padding:6px 12px;border-bottom:1px solid var(--ln);flex-wrap:wrap}
+.tb .tf{display:flex;width:120px}
+.tb label{font-size:12px;color:var(--mu);display:flex;gap:4px;align-items:center;cursor:pointer}
+.tb .h{margin-left:auto;font-size:15px;font-weight:600}
+svg{display:block;width:100%;height:auto;cursor:crosshair}
+svg path,svg line{vector-effect:non-scaling-stroke}
+.u rect,.d rect{shape-rendering:crispEdges}
+svg text{fill:var(--mu);font-size:11px;font-family:inherit}
+.u line,.u rect{stroke:var(--up);fill:var(--up)}.d line,.d rect{stroke:var(--dn);fill:var(--dn)}
+.bb{fill:none;stroke:var(--ac);stroke-width:1;opacity:.8}.mm{fill:none;stroke:var(--wa);stroke-width:1.2}
+.l1{fill:none;stroke:var(--ac);stroke-width:1.2}.l2{fill:none;stroke:var(--wa);stroke-width:1.2}
+.gr{stroke:var(--ln);stroke-width:1}
+#ch{position:relative;height:640px}#lg{position:absolute;left:10px;top:6px;z-index:3;font-size:12px;line-height:1.55;pointer-events:none}
+@media(max-width:1100px){#ch{height:520px}}
+.inf{padding:12px;display:grid;gap:14px}
+.inf h3{margin:0 0 6px;font-size:13px;font-weight:600}
+.big{font-size:22px;font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bx{background:var(--sf);border-radius:6px;padding:8px 10px}
+.bx .n{font-size:20px;font-weight:600}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+li{display:flex;gap:8px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:3px 10px}
+.note{font-size:12px;color:var(--mu)}
+@media(max-width:1100px){main{grid-template-columns:1fr}.lst{max-height:260px}}
+</style></head><body>
+<header><h1>Tín hiệu chứng khoán Việt Nam</h1>
+<div class="mk"><span id="dt"></span><span id="vn"></span><span class="pill" id="pl"></span></div></header>
+<main>
+<section class="pn"><h2>Cổ phiếu có tín hiệu hôm nay</h2>
+<div class="tabs" id="tabs"><button data-t="sw" class="on">Lướt sóng</button><button data-t="lt">Trung/dài hạn</button><button data-t="wl">Theo dõi</button></div>
+<div class="lst" id="lst"></div></section>
+<section class="pn"><div class="tb"><div class="tf" id="tf"><button data-f="D" class="on">Ngày</button><button data-f="W">Tuần</button></div>
+<label><input type="checkbox" id="cb" checked>Bollinger</label><label><input type="checkbox" id="cm" checked>MACD</label><label><input type="checkbox" id="cs" checked>Stochastic</label>
+<span class="h" id="hd"></span></div><div id="ch"></div></section>
+<section class="pn"><h2>Thông tin cổ phiếu</h2><div class="inf" id="inf"></div></section>
+</main>
+<script>
+let S=[],MK={t:"Chưa có",c:"mu"};
+let WL=[];const FL=["Thị trường chung trên MA50","Giá trên MA20 và MA50","Động lượng xác nhận (MACD, Stoch)","Khối lượng xác nhận","Thanh khoản đạt yêu cầu"];
+let tab="sw",cur="JVC",tf="D";
+const sma=(a,n)=>a.map((_,i)=>i<n-1?null:a.slice(i-n+1,i+1).reduce((x,y)=>x+y,0)/n);
+const ema=(a,n)=>{const k=2/(n+1);let e=a[0];return a.map(v=>e=v*k+e*(1-k))};
+const lab=v=>v>=75?["Mua","up"]:v>=55?["Theo dõi","wa"]:v>=40?["Sắp có tín hiệu","mu"]:["Tránh","dn"];
+const F=v=>Math.round(v).toLocaleString("vi-VN");
+const get=s=>S.find(x=>x.s===s);
+function list(){const k=tab==="lt"?"lt":"sw";let a=tab==="wl"?S.filter(x=>WL.includes(x.s)):[...S];a.sort((x,y)=>y[k]-x[k]);
+document.getElementById("lst").innerHTML=a.map(x=>{const c=x.d,l=c[c.length-1].c,p=c[c.length-2].c,ch=(l/p-1)*100,[t,cl]=lab(x[k]);
+return `<button class="row${x.s===cur?" on":""}" data-s="${x.s}"><span><b>${x.s}</b> <span class="${ch>=0?"up":"dn"}">${F(l)} (${ch>=0?"+":""}${ch.toFixed(2).replace(".",",")}%)</span></span><span class="sc">${x[k]}</span><small>${x.sec}, ${x.pt}${x.nw?' <span class="new">Mới hôm nay</span>':""}</small><span class="lb ${cl}">${t}</span></button>`}).join("")}
+let LC=null;const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();const DT=(()=>{const a=[];let t=new Date(Date.UTC(2026,9,16));while(a.length<600){const w=t.getUTCDay();if(w>0&&w<6)a.unshift(t.toISOString().slice(0,10));t=new Date(t-864e5)}return a})();const KF=v=>v>=1e6?(v/1e6).toFixed(2).replace('.',',')+'M':v>=1e3?Math.round(v/1e3)+'K':v;const f2=v=>v==null?'-':(Math.round(v*100)/100).toLocaleString('vi-VN');
+function chart(){const el=document.getElementById('ch');if(!window.LightweightCharts){el.textContent='Không tải được thư viện đồ thị.';return}const LW=LightweightCharts,st=get(cur);let d=st.d.map((k,i)=>({...k,t:k.t||DT[i+DT.length-st.d.length]}));if(tf==='W'){const w=[];for(let i=0;i<d.length;i+=5){const g=d.slice(i,i+5);w.push({t:g[g.length-1].t,o:g[0].o,h:Math.max(...g.map(x=>x.h)),l:Math.min(...g.map(x=>x.l)),c:g[g.length-1].c,v:g.reduce((a,x)=>a+x.v,0)})}d=w}const c=d.map(x=>x.c),n=d.length;const m=sma(c,20),sd=c.map((_,i)=>i<19?null:Math.sqrt(c.slice(i-19,i+1).reduce((a,x)=>a+(x-m[i])**2,0)/20)),bu=m.map((v,i)=>v==null?null:v+2*sd[i]),bl=m.map((v,i)=>v==null?null:v-2*sd[i]);const e1=ema(c,12),e2=ema(c,26),mc=e1.map((v,i)=>v-e2[i]),sg=ema(mc,9),hi=mc.map((v,i)=>v-sg[i]);const K=d.map((_,i)=>{if(i<13)return null;const w=d.slice(i-13,i+1),h=Math.max(...w.map(x=>x.h)),l=Math.min(...w.map(x=>x.l));return(d[i].c-l)/(h-l)*100}),D=K.map((_,i)=>i<15?null:(K[i]+K[i-1]+K[i-2])/3);const bo=document.getElementById('cb').checked,mo=document.getElementById('cm').checked,so=document.getElementById('cs').checked;const up=css('--up'),dn=css('--dn'),ac=css('--ac'),wa=css('--wa'),mu=css('--mu'),ln=css('--ln');
+if(LC)LC.remove();el.innerHTML="<div id='lg'></div>";const lg=document.getElementById('lg');const ch=LC=LW.createChart(el,{autoSize:true,layout:{background:{type:'solid',color:css('--pn')},textColor:mu,fontFamily:'"Be Vietnam Pro",system-ui,sans-serif',fontSize:12,panes:{separatorColor:ln}},grid:{vertLines:{color:ln},horzLines:{color:ln}},rightPriceScale:{borderColor:ln},timeScale:{borderColor:ln,rightOffset:6},crosshair:{mode:0},localization:{priceFormatter:p=>F(p),locale:'vi-VN'}});
+const L=a=>a.map((v,i)=>v==null?null:{time:d[i].t,value:v}).filter(Boolean),ln1=(a,col,pane)=>{const s=ch.addSeries(LW.LineSeries,{color:col,lineWidth:1,lastValueVisible:false,priceLineVisible:false,crosshairMarkerVisible:false},pane);s.setData(L(a));return s};
+const cs=ch.addSeries(LW.CandlestickSeries,{upColor:up,downColor:dn,borderVisible:false,wickUpColor:up,wickDownColor:dn},0);cs.setData(d.map(k=>({time:k.t,open:k.o,high:k.h,low:k.l,close:k.c})));cs.priceScale().applyOptions({scaleMargins:{top:0.2,bottom:0.2}});
+const vs=ch.addSeries(LW.HistogramSeries,{priceFormat:{type:'volume'},priceScaleId:'vol',lastValueVisible:false,priceLineVisible:false},0);vs.priceScale().applyOptions({scaleMargins:{top:0.85,bottom:0}});vs.setData(d.map(k=>({time:k.t,value:k.v,color:(k.c>=k.o?up:dn)+'88'})));
+if(bo){ln1(bu,ac,0);ln1(bl,ac,0);ln1(m,wa,0)}
+const mk=[];for(let i=Math.max(1,n-110);i<n;i++){if(hi[i-1]<0&&hi[i]>=0)mk.push({time:d[i].t,position:'belowBar',color:up,shape:'arrowUp'});else if(hi[i-1]>0&&hi[i]<=0)mk.push({time:d[i].t,position:'aboveBar',color:dn,shape:'arrowDown'})}LW.createSeriesMarkers(cs,mk);
+let pi=1;if(mo){const hs=ch.addSeries(LW.HistogramSeries,{lastValueVisible:false,priceLineVisible:false},pi);hs.setData(hi.map((v,i)=>({time:d[i].t,value:v,color:(v>=0?up:dn)+'99'})));ln1(mc,ac,pi);ln1(sg,wa,pi);pi++}
+if(so){const ks=ln1(K,ac,pi);ln1(D,wa,pi);[20,80].forEach(p=>ks.createPriceLine({price:p,color:mu,lineWidth:1,lineStyle:2,axisLabelVisible:false}))}
+try{ch.panes()[0].setStretchFactor(3.2)}catch(e){}
+ch.timeScale().setVisibleLogicalRange({from:n-(tf==='W'?100:130),to:n+4});
+const show=i=>{const k=d[i],p=d[Math.max(0,i-1)],pc=(k.c/p.c-1)*100,cl=k.c>=k.o?'up':'dn';lg.innerHTML=`<div><b>${st.s}</b> <span class='mu'>${tf==='D'?'Ngày':'Tuần'}, ${k.t.split('-').reverse().join('/')}</span></div><div class='${cl}'>Mở ${F(k.o)} Cao ${F(k.h)} Thấp ${F(k.l)} Đóng ${F(k.c)} (${pc>=0?'+':''}${pc.toFixed(2).replace('.',',')}%)</div><div class='mu'>Khối lượng <span class='${cl}'>${KF(k.v)}</span>${bo?` BB(20,2) <span style='color:${wa}'>${F(m[i]??0)}</span> <span style='color:${ac}'>${F(bu[i]??0)} ${F(bl[i]??0)}</span>`:''}</div><div class='mu'>${mo?`MACD <span style='color:${ac}'>${f2(mc[i])}</span> <span style='color:${wa}'>${f2(sg[i])}</span> `:''}${so?`Stoch <span style='color:${ac}'>${f2(K[i])}</span> <span style='color:${wa}'>${f2(D[i])}</span>`:''}</div>`};
+const ix=new Map(d.map((k,i)=>[k.t,i]));ch.subscribeCrosshairMove(p=>show(p.time&&ix.has(p.time)?ix.get(p.time):n-1));show(n-1);
+const l=c[n-1],pv=c[n-2];document.getElementById('hd').innerHTML=`${st.s} <span class='${l>=pv?'up':'dn'}'>${F(l)}</span>`}
+matchMedia('(prefers-color-scheme: dark)').onchange=()=>chart();
+function info(){const st=get(cur),dd=st.d,l=dd[dd.length-1].c,p=dd[dd.length-2].c,ch=(l/p-1)*100,stop=Math.min(...dd.slice(-10).map(x=>x.l))*.99,tg=l+2*(l-stop),[a,ac]=lab(st.sw),[b,bc]=lab(st.lt);
+document.getElementById("inf").innerHTML=`<div><div>${st.n}</div><div class="note">${st.sec}</div><div class="big">${F(l)} <span class="${ch>=0?"up":"dn"}" style="font-size:14px">${ch>=0?"+":""}${ch.toFixed(2).replace(".",",")}%</span></div></div>
+<div class="two"><div class="bx"><div class="note">Lướt sóng</div><div class="n">${st.sw}</div><div class="${ac}">${a}</div></div><div class="bx"><div class="note">Trung/dài hạn</div><div class="n">${st.lt}</div><div class="${bc}">${b}</div></div></div>
+<div><h3>Vì sao có tín hiệu</h3><ul>${FL.map((t,i)=>`<li><span class="${st.f[i]==="1"?"up":"dn"}">${st.f[i]==="1"?"✓":"✗"}</span>${t}</li>`).join("")}</ul></div>
+<div><h3>Kế hoạch gợi ý (lướt sóng)</h3><div class="kv"><span>Vùng vào lệnh</span><b>${F(l)}</b><span>Cắt lỗ</span><b class="dn">${F(stop)}</b><span>Mục tiêu</span><b class="up">${F(tg)}</b><span>Lợi nhuận / rủi ro</span><b>2,0</b></div></div>
+<div><h3>Bối cảnh</h3><div class="kv"><span>Thị trường chung</span><span class="${MK.c}">${MK.t}</span><span>Ngành</span><span>${st.sec}</span></div></div>
+${st.w?`<div class="note wa">${st.w}</div>`:""}
+<div class="note">Nguồn dữ liệu: vnstock, cập nhật sau phiên. Điểm số là quy tắc đơn giản, chưa backtest. Tín hiệu chỉ mang tính tham khảo, không phải khuyến nghị đầu tư.</div>`}
+function all(){list();chart();info()}
+document.getElementById("tabs").onclick=e=>{const t=e.target.dataset.t;if(!t)return;tab=t;document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));list()};
+document.getElementById("lst").onclick=e=>{const r=e.target.closest(".row");if(r){cur=r.dataset.s;all()}};
+document.getElementById("tf").onclick=e=>{const f=e.target.dataset.f;if(!f)return;tf=f;document.querySelectorAll("#tf button").forEach(b=>b.classList.toggle("on",b.dataset.f===f));chart()};
+["cb","cm","cs"].forEach(i=>document.getElementById(i).onchange=chart);
+fetch('data/data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(J=>{S=J.stocks;S.forEach(x=>x.d=x.d.map(r=>({t:r[0],o:r[1],h:r[2],l:r[3],c:r[4],v:r[5]})));WL=J.watchlist||[];MK=J.market;cur=(S.find(x=>WL.includes(x.s))||S[0]).s;document.getElementById('dt').textContent='Dữ liệu đến phiên '+J.asof.split('-').reverse().join('/');document.getElementById('vn').textContent=MK.vn||'';const p=document.getElementById('pl');p.textContent='Thị trường: '+MK.t.toLowerCase();p.className='pill '+MK.c;all()}).catch(()=>{document.getElementById('lst').innerHTML='<div class="inf note">Chưa có file data/data.json. Hãy chạy workflow Cập nhật dữ liệu trên GitHub, rồi mở trang qua địa chỉ GitHub Pages hoặc máy chủ cục bộ.</div>'});
+</script></body></html>

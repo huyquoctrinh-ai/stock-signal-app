@@ -1,0 +1,23 @@
+name: Cập nhật dữ liệu
+on:
+  schedule:
+    - cron: "30 9 * * 1-5"   # 16:30 giờ Việt Nam, các ngày trong tuần
+  workflow_dispatch:           # cho phép bấm chạy tay
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -U vnstock pandas
+      - run: python scripts/update_data.py
+      - run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/data.json
+          git diff --cached --quiet || (git commit -m "Cập nhật dữ liệu $(date -u +%F)" && git push)
